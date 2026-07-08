@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRAGV - Monitoreo Bluetooth</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <main class="dashboard">
+        <header>
+            <div class="title-container">
+                <h1>SRAGV</h1>
+                <p>Gestión de Viento Inteligente</p>
+            </div>
+            <button id="connectBtn" class="btn-primary">
+                <span class="icon">🔌</span> Conectar HM-10
+            </button>
+        </header>
+
+        <div class="grid-container">
+            <!-- Panel de Estado -->
+            <section class="glass-card status-panel">
+                <h2>Estado del Sistema</h2>
+                <div class="mode-display">
+                    <span id="currentMode" class="badge badge-offline">DESCONECTADO</span>
+                </div>
+            </section>
+
+            <!-- Panel de Viento -->
+            <section class="glass-card wind-panel">
+                <h2>Lectura de Viento</h2>
+                <div class="wind-info">
+                    <div class="wind-speed">
+                        <div class="circular-progress">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="meter" id="windMeter" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <div class="value"><span id="windVal">0</span>%</div>
+                        </div>
+                        <span class="label">Velocidad</span>
+                    </div>
+                    <div class="wind-direction">
+                        <div class="compass">
+                            <div id="compassNeedle" class="needle"></div>
+                            <span class="dir-n">N</span>
+                            <span class="dir-s">S</span>
+                            <span class="dir-e">E</span>
+                            <span class="dir-o">O</span>
+                        </div>
+                        <span class="label">Dirección (<span id="windDirLabel">-</span>)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel de Riego (Sectores) -->
+            <section class="glass-card irrigation-panel">
+                <h2>Sectores de Riego</h2>
+                <div class="sectors-grid">
+                    <div class="sector" id="sec-n">
+                        <div class="led"></div>
+                        <span>Norte</span>
+                    </div>
+                    <div class="sector" id="sec-e">
+                        <div class="led"></div>
+                        <span>Este</span>
+                    </div>
+                    <div class="sector" id="sec-o">
+                        <div class="led"></div>
+                        <span>Oeste</span>
+                    </div>
+                    <div class="sector" id="sec-s">
+                        <div class="led"></div>
+                        <span>Sur</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <div id="debugLog" class="glass-card debug-panel hidden">
+            <p id="debugText">Esperando conexión...</p>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
