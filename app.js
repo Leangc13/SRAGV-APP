@@ -49,7 +49,7 @@ async function sendBluetoothCommand(cmd) {
     if (characteristicCache) {
         try {
             const encoder = new TextEncoder();
-            await characteristicCache.writeValue(encoder.encode(cmd + '\n'));
+            await characteristicCache.writeValueWithoutResponse(encoder.encode(cmd + '\n'));
         } catch (error) {
             log('Error Tx: ' + error);
         }
