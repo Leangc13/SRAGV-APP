@@ -20,7 +20,6 @@
                 <p>Gestión de Viento Inteligente</p>
             </div>
             <div class="connection-status">
-                <span id="connectionBadge" class="status-badge">OFFLINE</span>
                 <button id="connectBtn" class="btn-primary">
                     <span class="icon">🔌</span> Conectar HM-10
                 </button>
@@ -88,19 +87,19 @@
 
             <!-- Panel de Configuración Remota -->
             <section class="glass-card config-panel">
-                <h2>Configuración Remota</h2>
+                <h2>Ajustes de Riego (Bluetooth)</h2>
                 
                 <div class="config-group">
                     <div class="config-item">
-                        <label>Viento Mod (<span id="valModTh">40</span>%)</label>
+                        <label>Viento Moderado (Alerta: <span id="valModTh">40</span>%)</label>
                         <input type="range" id="sliderModTh" min="0" max="100" step="5" value="40">
                     </div>
                     <div class="config-item">
-                        <label>Viento Cri (<span id="valCriTh">80</span>%)</label>
+                        <label>Viento Crítico (Corte total: <span id="valCriTh">80</span>%)</label>
                         <input type="range" id="sliderCriTh" min="0" max="100" step="5" value="80">
                     </div>
                     <div class="config-item">
-                        <label>Tiempo Riego (<span id="valTim">60</span>s)</label>
+                        <label>Duración de un ciclo de riego: <span id="valTim">60</span>s</label>
                         <input type="range" id="sliderTim" min="5" max="600" step="5" value="60">
                     </div>
                 </div>
