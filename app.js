@@ -44,10 +44,13 @@ connectBtn.addEventListener('click', () => {
     }
 });
 
+let lastConfigTx = 0;
+
 // Enviar Comandos Bluetooth
 async function sendBluetoothCommand(cmd) {
     if (characteristicCache) {
         try {
+            lastConfigTx = Date.now();
             const encoder = new TextEncoder();
             await characteristicCache.writeValueWithoutResponse(encoder.encode(cmd + '\n'));
         } catch (error) {
@@ -157,8 +160,8 @@ function parseSTM32Data(jsonString) {
         updateWind(data.v, data.d);
         updateSectors(data.s);
 
-        // Actualizar UI de configuración solo si no los estamos tocando (para evitar glitches)
-        if (data.c_mod !== undefined) {
+        // Actualizar UI de configuración solo si no enviamos comandos recientemente (evita el "snap-back")
+        if (data.c_mod !== undefined && (Date.now() - lastConfigTx > 3000)) {
             if (document.activeElement !== sliderModTh) { sliderModTh.value = data.c_mod; valModTh.textContent = data.c_mod; }
             if (document.activeElement !== sliderCriTh) { sliderCriTh.value = data.c_cri; valCriTh.textContent = data.c_cri; }
             if (document.activeElement !== sliderTim) { sliderTim.value = data.c_tim; valTim.textContent = data.c_tim; }
