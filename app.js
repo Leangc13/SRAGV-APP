@@ -16,13 +16,26 @@ const windValEl = document.getElementById('windVal');
 const windMeterEl = document.getElementById('windMeter');
 const compassNeedleEl = document.getElementById('compassNeedle');
 const windDirLabelEl = document.getElementById('windDirLabel');
-
 const secN = document.getElementById('sec-n');
 const secS = document.getElementById('sec-s');
 const secE = document.getElementById('sec-e');
 const secO = document.getElementById('sec-o');
 
-// Eventos
+// UI Config Elements
+const sliderModTh = document.getElementById('sliderModTh');
+const sliderCriTh = document.getElementById('sliderCriTh');
+const sliderTim = document.getElementById('sliderTim');
+const valModTh = document.getElementById('valModTh');
+const valCriTh = document.getElementById('valCriTh');
+const valTim = document.getElementById('valTim');
+const chkNight = document.getElementById('chkNight');
+
+const chkInhN = document.getElementById('chkInhN');
+const chkInhS = document.getElementById('chkInhS');
+const chkInhE = document.getElementById('chkInhE');
+const chkInhO = document.getElementById('chkInhO');
+
+// Eventos Bluetooth
 connectBtn.addEventListener('click', () => {
     if (bluetoothDevice && bluetoothDevice.gatt.connected) {
         disconnect();
@@ -30,6 +43,44 @@ connectBtn.addEventListener('click', () => {
         connect();
     }
 });
+
+// Enviar Comandos Bluetooth
+async function sendBluetoothCommand(cmd) {
+    if (characteristicCache) {
+        try {
+            const encoder = new TextEncoder();
+            await characteristicCache.writeValue(encoder.encode(cmd + '\n'));
+            log('Tx: ' + cmd);
+        } catch (error) {
+            log('Error Tx: ' + error);
+        }
+    }
+}
+
+// Eventos de Configuración UI
+sliderModTh.addEventListener('change', (e) => sendBluetoothCommand(`SET:MOD:${e.target.value}`));
+sliderModTh.addEventListener('input', (e) => valModTh.textContent = e.target.value);
+
+sliderCriTh.addEventListener('change', (e) => sendBluetoothCommand(`SET:CRI:${e.target.value}`));
+sliderCriTh.addEventListener('input', (e) => valCriTh.textContent = e.target.value);
+
+sliderTim.addEventListener('change', (e) => sendBluetoothCommand(`SET:TIM:${e.target.value}`));
+sliderTim.addEventListener('input', (e) => valTim.textContent = e.target.value);
+
+chkNight.addEventListener('change', (e) => sendBluetoothCommand(`SET:NIG:${e.target.checked ? 1 : 0}`));
+
+function updateInhibits() {
+    let mask = 0;
+    if (chkInhN.checked) mask |= (1 << 0);
+    if (chkInhS.checked) mask |= (1 << 1);
+    if (chkInhE.checked) mask |= (1 << 2);
+    if (chkInhO.checked) mask |= (1 << 3);
+    sendBluetoothCommand(`SET:INH:${mask}`);
+}
+chkInhN.addEventListener('change', updateInhibits);
+chkInhS.addEventListener('change', updateInhibits);
+chkInhE.addEventListener('change', updateInhibits);
+chkInhO.addEventListener('change', updateInhibits);
 
 // Funciones Bluetooth
 async function connect() {
@@ -102,14 +153,30 @@ function parseSTM32Data(jsonString) {
     try {
         const data = JSON.parse(jsonString);
         
-        // Actualizar UI
+        // Actualizar UI de telemetría
         updateMode(data.m);
         updateWind(data.v, data.d);
         updateSectors(data.s);
+
+        // Actualizar UI de configuración solo si no los estamos tocando (para evitar glitches)
+        if (data.c_mod !== undefined) {
+            if (document.activeElement !== sliderModTh) { sliderModTh.value = data.c_mod; valModTh.textContent = data.c_mod; }
+            if (document.activeElement !== sliderCriTh) { sliderCriTh.value = data.c_cri; valCriTh.textContent = data.c_cri; }
+            if (document.activeElement !== sliderTim) { sliderTim.value = data.c_tim; valTim.textContent = data.c_tim; }
+            
+            chkNight.checked = (data.c_nig === 1);
+            
+            let mask = data.c_inh || 0;
+            chkInhN.checked = (mask & (1 << 0)) !== 0;
+            chkInhS.checked = (mask & (1 << 1)) !== 0;
+            chkInhE.checked = (mask & (1 << 2)) !== 0;
+            chkInhO.checked = (mask & (1 << 3)) !== 0;
+        }
         
-        log('Rx OK: ' + jsonString);
+        // Mostrar latido en vez de JSON crudo
+        log('Telemetría recibida ✓');
     } catch (e) {
-        log('Error parseando JSON: ' + e.message + ' | Raw: ' + jsonString);
+        log('Error parseando JSON: ' + e.message);
     }
 }
 

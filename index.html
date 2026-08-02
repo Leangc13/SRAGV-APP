@@ -19,9 +19,12 @@
                 <h1>SRAGV</h1>
                 <p>Gestión de Viento Inteligente</p>
             </div>
-            <button id="connectBtn" class="btn-primary">
-                <span class="icon">🔌</span> Conectar HM-10
-            </button>
+            <div class="connection-status">
+                <span id="connectionBadge" class="status-badge">OFFLINE</span>
+                <button id="connectBtn" class="btn-primary">
+                    <span class="icon">🔌</span> Conectar HM-10
+                </button>
+            </div>
         </header>
 
         <div class="grid-container">
@@ -79,6 +82,68 @@
                     <div class="sector" id="sec-s">
                         <div class="led"></div>
                         <span>Sur</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel de Configuración Remota -->
+            <section class="glass-card config-panel">
+                <h2>Configuración Remota</h2>
+                
+                <div class="config-group">
+                    <div class="config-item">
+                        <label>Viento Mod (<span id="valModTh">40</span>%)</label>
+                        <input type="range" id="sliderModTh" min="0" max="100" step="5" value="40">
+                    </div>
+                    <div class="config-item">
+                        <label>Viento Cri (<span id="valCriTh">80</span>%)</label>
+                        <input type="range" id="sliderCriTh" min="0" max="100" step="5" value="80">
+                    </div>
+                    <div class="config-item">
+                        <label>Tiempo Riego (<span id="valTim">60</span>s)</label>
+                        <input type="range" id="sliderTim" min="5" max="600" step="5" value="60">
+                    </div>
+                </div>
+
+                <div class="switches-group">
+                    <div class="switch-item">
+                        <label>Riego Nocturno</label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="chkNight">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <h3 class="sub-heading">Inhibición Manual (Apagar Zonas)</h3>
+                <div class="switches-group inhibits-grid">
+                    <div class="switch-item">
+                        <label>Norte</label>
+                        <label class="toggle-switch red">
+                            <input type="checkbox" id="chkInhN">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="switch-item">
+                        <label>Este</label>
+                        <label class="toggle-switch red">
+                            <input type="checkbox" id="chkInhE">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="switch-item">
+                        <label>Sur</label>
+                        <label class="toggle-switch red">
+                            <input type="checkbox" id="chkInhS">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="switch-item">
+                        <label>Oeste</label>
+                        <label class="toggle-switch red">
+                            <input type="checkbox" id="chkInhO">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                 </div>
             </section>
