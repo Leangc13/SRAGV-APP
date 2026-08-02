@@ -29,6 +29,7 @@ const valModTh = document.getElementById('valModTh');
 const valCriTh = document.getElementById('valCriTh');
 const valTim = document.getElementById('valTim');
 const chkNight = document.getElementById('chkNight');
+const selOpMode = document.getElementById('selOpMode');
 
 const chkInhN = document.getElementById('chkInhN');
 const chkInhS = document.getElementById('chkInhS');
@@ -70,6 +71,8 @@ sliderTim.addEventListener('change', (e) => sendBluetoothCommand(`SET:TIM:${e.ta
 sliderTim.addEventListener('input', (e) => valTim.textContent = e.target.value);
 
 chkNight.addEventListener('change', (e) => sendBluetoothCommand(`SET:NIG:${e.target.checked ? 1 : 0}`));
+
+selOpMode.addEventListener('change', (e) => sendBluetoothCommand(`SET:OPM:${e.target.value}`));
 
 function updateInhibits() {
     let mask = 0;
@@ -167,6 +170,9 @@ function parseSTM32Data(jsonString) {
             if (document.activeElement !== sliderTim) { sliderTim.value = data.c_tim; valTim.textContent = data.c_tim; }
             
             chkNight.checked = (data.c_nig === 1);
+            if (data.c_opm !== undefined && document.activeElement !== selOpMode) {
+                selOpMode.value = data.c_opm.toString();
+            }
             
             let mask = data.c_inh || 0;
             chkInhN.checked = (mask & (1 << 0)) !== 0;
