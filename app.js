@@ -162,6 +162,7 @@ function parseSTM32Data(jsonString) {
         updateMode(data.m);
         updateWind(data.v, data.d);
         updateSectors(data.s);
+        if (data.c_lux !== undefined) updateLight(data.c_lux);
 
         // Actualizar UI de configuración solo si no enviamos comandos recientemente (evita el "snap-back")
         if (data.c_mod !== undefined && (Date.now() - lastConfigTx > 3000)) {
@@ -258,6 +259,12 @@ function resetUI() {
     updateMode('OFFLINE');
     updateWind(0, '-');
     updateSectors([0,0,0,0]);
+}
+
+function updateLight(lux) {
+    const val = Math.min(100, Math.max(0, lux));
+    document.getElementById('lightVal').textContent = val;
+    document.getElementById('lightBarFill').style.width = val + '%';
 }
 
 function log(msg) {

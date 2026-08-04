@@ -16,6 +16,39 @@
     box-sizing: border-box;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Light Bar */
+.light-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+}
+.light-icon { font-size: 1.3rem; }
+.light-bar-bg {
+    flex-grow: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+}
+.light-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f5a623, #fff176);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+.light-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-dark);
